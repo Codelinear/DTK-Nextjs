@@ -50,7 +50,7 @@ const SummaryPage = () => {
   dispatch(setField({ key: "ourCost", value: totalCharge }));
   const formData = useSelector((s) => s.form);
 
-  console.log(formData);
+  // console.log(formData);
 
   const [expandedService, setExpandedService] = useState(null);
 
@@ -80,7 +80,7 @@ const SummaryPage = () => {
 
     const data = await res.json();
     console.log("API response:", data);
-    if (res.status == 201) {
+    if (data.status == 201) {
       router.push("/final");
     }
     // };
