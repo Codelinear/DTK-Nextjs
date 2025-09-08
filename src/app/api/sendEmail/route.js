@@ -101,7 +101,7 @@ Our Cost: $${ourCost}
 
     await transporter.sendMail({
       from: "contact.thedigitaltoolkit@gmail.com",
-      to: "amankapil60@gmail.com",
+      to: "khalil@kanbardigital.com",
       subject: "New Form Submission From DTK",
       text: message,
     });
