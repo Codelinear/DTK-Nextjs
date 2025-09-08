@@ -11,7 +11,7 @@ const SummaryPage = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const { serviceCharges } = useSelector((state) => state.services);
-  //  uncomment // dispatch(setServices(serviceCharges));
+  dispatch(setServices(serviceCharges));
   console.log(serviceCharges);
   // console.log(serviceCharges.totalCharges);
   const x = serviceCharges.totalCharges;
@@ -48,9 +48,10 @@ const SummaryPage = () => {
   dispatch(setField({ key: "averagePrice", value: averagePrice }));
   dispatch(setField({ key: "overcharging", value: overchargingMin }));
   dispatch(setField({ key: "ourCost", value: totalCharge }));
+
   const formData = useSelector((s) => s.form);
 
-  // console.log(formData);
+  console.log(formData);
 
   const [expandedService, setExpandedService] = useState(null);
 
@@ -67,25 +68,43 @@ const SummaryPage = () => {
   const handleDelete = (serviceId) => {
     dispatch(removeService(serviceId));
   };
+  const [loading, setLoading] = useState(false);
 
   const SubmitButton = async () => {
-    // const formData = useSelector((s) => s.form);
+    // const res = await fetch("/api/sendEmail", {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify(formData),
+    // });
 
-    // const handleSubmit = async () => {
-    const res = await fetch("/api/sendEmail", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
+    // const data = await res.json();
+    // console.log("API response:", data);
+    // if (data.status == 201) {
+    //   router.push("/final");
+    // }
+    setLoading(true);
+    try {
+      const res = await fetch("/api/sendEmail", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
 
-    const data = await res.json();
-    console.log("API response:", data);
-    if (data.status == 201) {
-      router.push("/final");
+      const data = await res.json();
+      console.log("API response:", data);
+
+      if (data.status === 201) {
+        router.push("/final");
+      } else {
+        // handle other response statuses
+        alert(data.message || "Something went wrong!");
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      alert("Failed to submit form. Please try again.");
+    } finally {
+      setLoading(false);
     }
-    // };
-
-    // return <button onClick={handleSubmit}>Submit & Send Email</button>;
   };
 
   return (
@@ -250,7 +269,7 @@ const SummaryPage = () => {
           onClick={SubmitButton}
           className="bg-[#009FF5] text-white px-4 py-2 rounded"
         >
-          Generate agency rate
+          {loading ? "Generating..." : "Generate agency rate"}
         </button>
       </div>
     </div>

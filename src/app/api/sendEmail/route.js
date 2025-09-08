@@ -1,95 +1,3 @@
-// // app/api/sendEmail/route.js
-// import { NextResponse } from "next/server";
-// import nodemailer from "nodemailer";
-// import clientPromise from "../lib/mongodb";
-
-// export async function POST(req) {
-//   try {
-//     const body = await req.json();
-//     console.log("Received data:", body);
-
-//     const {
-//       companyName,
-//       companySize,
-//       companyType,
-//       email,
-//       services,
-//       totalCost,
-//       undercharging,
-//       averagePrice,
-//       overcharging,
-//       ourCost,
-//     } = body;
-
-//     const client = await clientPromise;
-//     const db = client.db("dtk"); // same as above
-//     const collection = db.collection("formSubmissions");
-
-//     const result = await collection.insertOne({
-//       companyName,
-//       companySize,
-//       companyType,
-//       email,
-//       services,
-//       totalCost,
-//       undercharging,
-//       averagePrice,
-//       overcharging,
-//       ourCost,
-//       createdAt: new Date(),
-//     });
-//     console.log(result);
-
-//     const transporter = nodemailer.createTransport({
-//       service: "gmail",
-//       auth: {
-//         user: process.env.EMAIL_USER,
-//         pass: process.env.EMAIL_PASS,
-//       },
-//     });
-
-//     const serviceList = Object.values(services)
-//       .map((s) => `${s.ServiceName} - Total: $${s.totalCharges}`)
-//       .join("\n");
-
-//     const message = `
-// Company: ${companyName}
-// Size: ${companySize}
-// Type: ${companyType}
-// Email: ${email}
-
-// Services:
-// ${serviceList}
-
-// Total: $${totalCost}
-// Undercharging: ${undercharging}
-// Average Price: ${averagePrice}
-// Overcharging: ${overcharging}
-// Our Cost: $${ourCost}
-//     `;
-
-//     console.log(message);
-//     // await transporter.sendMail({
-//     //   from: process.env.EMAIL_USER,
-//     //   to: process.env.ADMIN_EMAIL,
-//     //   subject: "New Form Submission",
-//     //   text: message,
-//     // });
-
-//     // await transporter.sendMail({
-//     //   from: process.env.EMAIL_USER,
-//     //   to: email,
-//     //   subject: "Your Submission Confirmation",
-//     //   text: message,
-//     // });
-
-//     return NextResponse.json({ data: result, status: 201, success: true });
-//   } catch (err) {
-//     console.error(err);
-//     return NextResponse.json({ status: 401, success: false }, { status: 500 });
-//   }
-// }
-
 // app/api/sendEmail/route.js
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
@@ -160,8 +68,8 @@ export async function POST(req) {
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
+        user: "contact.thedigitaltoolkit@gmail.com",
+        pass: "alfl crjb koud xhmi",
       },
     });
 
@@ -171,6 +79,7 @@ export async function POST(req) {
       .join("\n");
 
     const message = `
+
 Company: ${companyName}
 Size: ${companySize}
 Type: ${companyType}
@@ -189,21 +98,20 @@ Our Cost: $${ourCost}
     console.log("Message ready:\n", message);
 
     // Uncomment when you want emails to send
-    /*
+
     await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: process.env.ADMIN_EMAIL,
-      subject: "New Form Submission",
+      from: "contact.thedigitaltoolkit@gmail.com",
+      to: "amankapil60@gmail.com",
+      subject: "New Form Submission From DTK",
       text: message,
     });
 
     await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: email,
+      from: "contact.thedigitaltoolkit@gmail.com",
+      to: email || "aman@codelinear.com",
       subject: "Your Submission Confirmation",
       text: message,
     });
-    */
 
     return NextResponse.json({ data: submission, status: 201, success: true });
   } catch (err) {
